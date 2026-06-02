@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wonjin Eum",
-  description: "Wonjin Eum's personal portfolio website.",
+  title: "Wonjin Eum | Portfolio",
+  description:
+    "Wonjin Eum's personal portfolio website built with Next.js, TypeScript, Tailwind CSS, and framer-motion.",
 };
 
 export default function RootLayout({
