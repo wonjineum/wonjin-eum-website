@@ -6,6 +6,54 @@ import Image from "next/image";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ArrowDown, ChevronDown, FileText } from "lucide-react";
 import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa6";
+import { useEffect } from "react";
+
+function slugify(name: string) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "").replace(/\s+/g, "");
+}
+
+function LogoInline({
+  src,
+  href,
+  ariaLabel,
+}: {
+  src: string;
+  href?: string;
+  ariaLabel?: string;
+}) {
+  const [errored, setErrored] = useState(false);
+
+  useEffect(() => setErrored(false), [src]);
+
+  const content = errored ? null : (
+    <img
+      src={src}
+      alt={ariaLabel ?? "logo"}
+      onError={() => setErrored(true)}
+      style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 6 }}
+    />
+  );
+
+  const wrapperStyle: React.CSSProperties = {
+    display: "inline-block",
+    verticalAlign: "middle",
+    width: 24,
+    height: 24,
+    marginRight: 4,
+  };
+
+  const placeholder = <span style={{ width: "100%", height: "100%", display: "inline-block", backgroundColor: "#f59e0b", borderRadius: 6 }} />;
+
+  return href ? (
+    <a href={href} aria-label={ariaLabel} style={wrapperStyle}>
+      {content ?? placeholder}
+    </a>
+  ) : (
+    <span aria-label={ariaLabel} style={wrapperStyle}>
+      {content ?? placeholder}
+    </span>
+  );
+}
 
 type SocialLink = {
   label: string;
@@ -161,19 +209,16 @@ export default function Home() {
   const [openExperience, setOpenExperience] = useState<Set<string>>(() => new Set());
 
   return (
-    <main className="relative overflow-hidden bg-[#fffef9] text-zinc-950">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(245,221,142,0.28),_transparent_28%),linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(255,252,244,0.9)_100%)]" />
+    <main className="relative overflow-hidden bg-white text-[#111111]">
+      <div className="pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-200/80 to-transparent" />
 
-      <header className="sticky top-0 z-50 border-b border-zinc-200/60 bg-white/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4 sm:px-10 lg:flex-row lg:items-center lg:justify-between lg:px-16">
+      <header className="sticky top-0 z-50 border-b border-zinc-200/60 bg-white/80 backdrop-blur-xl transition-opacity duration-300">
+        <div className="mx-auto flex max-w-6xl flex-row items-center justify-between px-6 py-4 sm:px-10 lg:px-16">
           <a
             href="#home"
             className="inline-flex items-center gap-3 self-start text-sm font-semibold tracking-[0.18em] text-zinc-950 transition-colors hover:text-amber-700"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 bg-white text-xs tracking-[0.22em] text-amber-700 shadow-sm">
-              WE
-            </span>
             <span>Wonjin Eum</span>
           </a>
 
@@ -193,7 +238,7 @@ export default function Home() {
 
       <motion.section
         id="home"
-        className="relative mx-auto min-h-[calc(100vh-4.5rem)] w-full max-w-6xl scroll-mt-24 px-6 py-10 sm:px-10 lg:px-16 lg:py-14"
+        className="relative mx-auto min-h-[calc(100vh-4.5rem)] w-full max-w-6xl scroll-mt-24 px-6 py-3 sm:px-10 lg:px-16 lg:py-2"
         initial="hidden"
         animate="visible"
         variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
@@ -205,10 +250,10 @@ export default function Home() {
               variants={fadeUp}
               transition={fadeTransition}
             >
-              Portfolio
+              Software Developer
             </motion.p>
             <motion.h1
-              className="max-w-3xl text-5xl font-semibold tracking-tight text-zinc-950 sm:text-7xl lg:text-[6rem] lg:leading-[0.9]"
+              className="max-w-3xl text-5xl font-semibold tracking-tight text-[#111111] sm:text-7xl lg:text-[6rem] lg:leading-[0.9]"
               variants={fadeUp}
               transition={fadeTransition}
             >
@@ -227,7 +272,7 @@ export default function Home() {
                   target={href.startsWith("mailto:") || href.startsWith("/") ? undefined : "_blank"}
                   rel={href.startsWith("mailto:") || href.startsWith("/") ? undefined : "noreferrer"}
                   aria-label={label}
-                  className="group inline-flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-300 hover:text-zinc-950 hover:shadow-[0_16px_36px_rgba(0,0,0,0.05)]"
+                  className="group inline-flex h-12 w-12 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-300 hover:text-[#111111] hover:shadow-[0_16px_36px_rgba(0,0,0,0.05)]"
                 >
                   <Icon className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
                 </a>
@@ -264,22 +309,32 @@ export default function Home() {
         </motion.a>
       </motion.section>
 
-      <Section id="about" label="About">
-        <motion.p className="mx-auto max-w-5xl text-center text-2xl leading-10 text-zinc-700 sm:text-3xl sm:leading-[1.55]" variants={fadeUp} transition={fadeTransition}>
-          I&apos;m Wonjin, a student at Cornell University studying Computer Science! 
-          <span className="my-3 block h-px w-full bg-amber-200/0" />
-          Whether through building tools that save lives or shipping apps with tens of thousands of users, I always
-          crave to use my technical skills to create real-world impact.
-          <span className="my-3 block h-px w-full bg-amber-200/0" />
-          Outside of building things, you&apos;ll find me on an outdoor trail somewhere, saying hi to
-          strangers, or hunting for the best iced coffee on campus.
+      <motion.section
+        id="about"
+        className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-10 sm:py-24 lg:px-16 lg:py-28"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+      >
+        <motion.p className="mx-auto mt-6 max-w-5xl text-left text-2xl sm:text-3xl leading-[3rem] font-medium text-[#111111]" variants={fadeUp} transition={fadeTransition}>
+          Hello! I&apos;m Wonjin — a 👩🏻‍💻 <strong className="font-bold">software developer</strong> always craving to use my technical skills to create 🌎 <strong className="font-bold">real-world impact</strong>.
         </motion.p>
-      </Section>
+
+        <motion.p className="mx-auto mt-6 max-w-5xl text-left text-2xl sm:text-3xl leading-[3rem] font-medium text-[#111111]" variants={fadeUp} transition={fadeTransition}>
+          Currently, I am studying CS at <span className="inline whitespace-nowrap"><LogoInline src="/cornell-logo.jpg" ariaLabel="Cornell" /> <strong className="font-bold">Cornell University</strong></span>, building <span className="inline whitespace-nowrap"><LogoInline src="/project-narcansos.jpg" href="#narcansos" ariaLabel="NarcanSOS" /> tools</span>  that <strong className="font-bold">save lives</strong>, and shipping <span className="inline whitespace-nowrap"><LogoInline src="/project-eatery.jpg" href="#eatery" ariaLabel="Eatery" /> apps </span> with <strong className="font-bold">tens of thousands of users</strong>.
+        </motion.p>
+
+        <motion.p className="mx-auto mt-6 max-w-5xl text-left text-2xl sm:text-3xl leading-[3rem] font-medium text-[#111111]" variants={fadeUp} transition={fadeTransition}>
+          Outside of the computer screen, you'll find me on an ⛰️ outdoor trail somewhere, saying 👋 hi to strangers, or hunting for the best ☕️ iced coffee on campus!
+        </motion.p>
+      </motion.section>
 
       <Section id="projects" label="Projects">
         <div className="grid gap-5">
           {projects.map((project, index) => (
             <motion.article
+              id={slugify(project.name)}
               key={project.name}
               className="group overflow-hidden rounded-[2rem] border border-zinc-200 bg-white shadow-[0_1px_0_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-[0_22px_60px_rgba(0,0,0,0.05)]"
               variants={fadeUp}
