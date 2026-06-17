@@ -79,6 +79,17 @@ type ExperienceItem = {
   imageAlt?: string;
 };
 
+type Sticker = {
+  src: string;
+  alt: string;
+  tip: string;
+  top: number;
+  left: number;
+  rotate: string;
+  shape: "square" | "circle";
+  size: number;
+};
+
 const navItems = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
@@ -92,6 +103,109 @@ const socialLinks: SocialLink[] = [
   { label: "LinkedIn", href: "https://linkedin.com/in/wonjineum", icon: FaLinkedinIn },
   { label: "Email", href: "mailto:we46@cornell.edu", icon: FaEnvelope },
   { label: "Resume", href: "/resume.pdf", icon: FileText },
+];
+
+const stickers: Sticker[] = [
+  {
+    src: "/sticker-appdev.png",
+    alt: "Cornell AppDev",
+    tip: "Cornell AppDev — iOS & web dev club. PM on Eatery, the campus dining app with 40k+ downloads.",
+    top: 130,
+    left: 200,
+    rotate: "-8deg",
+    shape: "square",
+    size: 112,
+  },
+  {
+    src: "/sticker-cds.png",
+    alt: "Cornell Data Science",
+    tip: "Cornell Data Science — researching ML-guided cache eviction policies with Rust + PyTorch.",
+    top: 150,
+    left: 370,
+    rotate: "5deg",
+    shape: "square",
+    size: 112,
+  },
+  {
+    src: "/sticker-cornell.png",
+    alt: "Cornell University",
+    tip: "Cornell University — studying CS in the College of Engineering, Class of 2027.",
+    top: 100,
+    left: 710,
+    rotate: "6deg",
+    shape: "circle",
+    size: 120,
+  },
+  {
+    src: "/sticker-ccodp.png",
+    alt: "CCODP",
+    tip: "Central Coast Overdose Prevention — nonprofit working to reduce overdose deaths. Built NarcanSOS in partnership with them.",
+    top: 400,
+    left: 160,
+    rotate: "4deg",
+    shape: "square",
+    size: 112,
+  },
+  {
+    src: "/sticker-cayuga.png",
+    alt: "Cayuga Healthcare",
+    tip: "Cayuga Healthcare Consulting — Cornell consulting club focused on healthcare strategy and innovation.",
+    top: 325,
+    left: 250,
+    rotate: "-3deg",
+    shape: "square",
+    size: 112,
+  },
+  {
+    src: "/sticker-boarding.png",
+    alt: "Boarding Pass",
+    tip: "Always moving — between Ithaca, LA, Seoul, and wherever comes next.",
+    top: 380,
+    left: 500,
+    rotate: "3deg",
+    shape: "square",
+    size: 112,
+  },
+  {
+    src: "/sticker-ithaca.png",
+    alt: "Ithaca",
+    tip: "Ithaca, NY — home of gorges, cold winters, and Cornell.",
+    top: 230,
+    left: 700,
+    rotate: "-10deg",
+    shape: "circle",
+    size: 76,
+  },
+  {
+    src: "/sticker-monterey.png",
+    alt: "Monterey",
+    tip: "Monterey, CA — where I grew up, on the coast.",
+    top: 215,
+    left: 615,
+    rotate: "10deg",
+    shape: "circle",
+    size: 76,
+  },
+  {
+    src: "/sticker-korea.png",
+    alt: "Korea",
+    tip: "Born and raised in South Korea — the kimchi, the trains, the Han River always calling me back.",
+    top: 230,
+    left: 530,
+    rotate: "-10deg",
+    shape: "circle",
+    size: 76,
+  },
+  {
+    src: "/sticker-linkedin.png",
+    alt: "LinkedIn",
+    tip: "LinkedIn — Full Stack Engineering Intern, built a Chrome extension using LLMs for clothing sustainability scoring.",
+    top: 400,
+    left: 680,
+    rotate: "-10deg",
+    shape: "square",
+    size: 112,
+  },
 ];
 
 const projects: Project[] = [
@@ -543,8 +657,8 @@ export default function Home() {
       <Section id="contact" label="Contact">
         <div ref={stickerWallRef} className="mx-auto flex max-w-5xl flex-col items-center gap-8">
           <div className="relative w-full overflow-hidden rounded-[2.5rem] border border-zinc-200 bg-[#f4f4f4] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:p-6">
-            <div className="relative aspect-[560/410] w-full overflow-visible">
-              <svg aria-hidden="true" viewBox="0 0 560 410" className="absolute inset-0 h-full w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+            <div className="relative mx-auto" style={{ width: 1008, height: 738 }}>
+              <svg aria-hidden="true" viewBox="0 0 560 410" width="1008" height="738" className="absolute inset-0 drop-shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
                 <defs>
                   <radialGradient id="laptopGradient" cx="50%" cy="35%" r="75%">
                     <stop offset="0%" stopColor="#e8e8e8" />
@@ -573,64 +687,29 @@ export default function Home() {
                 style={{ left: "50%", top: "50%" }}
               />
 
-              <div className="sticker absolute flex h-24 w-28 flex-col justify-center rounded-[1.1rem] border border-zinc-200 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 38, left: 44, transform: "rotate(-8deg)" }} data-tip="Cornell AppDev — iOS & web dev club. PM on Eatery, the campus dining app with 40k+ downloads.">
-                <span className="text-[0.65rem] font-bold tracking-[0.28em] text-red-600">CORNELL</span>
-                <span className="mt-1 text-sm font-semibold text-zinc-950">AppDev</span>
-              </div>
-
-              <div className="sticker absolute flex h-24 w-28 flex-col justify-center rounded-[1.1rem] border border-[#1e3a5f] bg-[#1e3a5f] p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 34, left: 270, transform: "rotate(5deg)" }} data-tip="Cornell Data Science — researching ML-guided cache eviction policies with Rust + PyTorch.">
-                <span className="text-[0.65rem] font-bold tracking-[0.28em] text-sky-300">CORNELL</span>
-                <span className="mt-1 text-sm font-semibold text-white">Data Science</span>
-              </div>
-
-              <div className="sticker absolute flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#B31B1B] bg-[#B31B1B] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 44, left: 468, transform: "rotate(6deg)" }} data-tip="Cornell University — studying CS in the College of Engineering, Class of 2027.">
-                <div className="leading-none">
-                  <div className="text-[0.63rem] font-bold tracking-[0.22em] text-white">CORNELL</div>
-                  <div className="mt-1 text-[0.58rem] font-semibold tracking-[0.18em] text-red-300">UNIVERSITY</div>
+              {stickers.map((sticker) => (
+                <div
+                  key={sticker.alt}
+                  className="sticker absolute overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.15)] transition-transform duration-200 hover:scale-105"
+                  style={{
+                    top: sticker.top,
+                    left: sticker.left,
+                    width: sticker.size,
+                    height: sticker.size,
+                    transform: `rotate(${sticker.rotate})`,
+                    borderRadius: sticker.shape === "circle" ? "50%" : "1.1rem",
+                  }}
+                  data-tip={sticker.tip}
+                >
+                  <Image
+                    src={sticker.src}
+                    alt={sticker.alt}
+                    fill
+                    className="object-cover"
+                    sizes="120px"
+                  />
                 </div>
-              </div>
-
-              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-emerald-200 bg-emerald-500 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 170, left: 36, transform: "rotate(4deg)" }} data-tip="Central Coast Overdose Prevention — nonprofit working to reduce overdose deaths. Built NarcanSOS in partnership with them.">
-                <span className="text-[0.6rem] font-bold tracking-[0.24em] text-emerald-900">CENTRAL COAST</span>
-                <span className="mt-1 text-sm font-semibold text-white">CCODP</span>
-                <span className="mt-1 text-[0.65rem] font-medium text-emerald-200">Overdose Prevention 💚</span>
-              </div>
-
-              <div className="sticker absolute flex h-24 w-24 flex-col items-center justify-center rounded-[1.1rem] border border-zinc-200 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 295, left: 52, transform: "rotate(-5deg)" }} data-tip="Born and raised in South Korea — the kimchi, the trains, the Han River always calling me back.">
-                <span className="text-3xl leading-none">🇰🇷</span>
-                <span className="mt-1 text-sm font-semibold text-zinc-700">Korea</span>
-              </div>
-
-              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-indigo-300 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 175, left: 195, transform: "rotate(-3deg)" }} data-tip="Cayuga Healthcare Consulting — Cornell consulting club focused on healthcare strategy and innovation.">
-                <span className="text-[0.62rem] font-bold tracking-[0.24em] text-indigo-300">CAYUGA</span>
-                <span className="mt-1 text-sm font-semibold text-zinc-950">Healthcare</span>
-                <span className="mt-1 text-[0.65rem] font-medium text-indigo-500">Consulting 🏥</span>
-              </div>
-
-              <div className="sticker absolute flex h-28 w-34 flex-col justify-center rounded-[1.1rem] border border-sky-200 bg-sky-50 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 290, left: 200, transform: "rotate(3deg)" }} data-tip="Always moving — between Ithaca, LA, Seoul, and wherever comes next.">
-                <div className="flex items-center justify-center gap-2 text-[0.75rem] font-bold uppercase tracking-[0.22em] text-sky-900">
-                  <span>Boarding Pass</span>
-                </div>
-                <div className="mt-2 border-t border-dashed border-sky-200 pt-2 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-sky-900">
-                  <div>ICN → JFK</div>
-                  <div>✈ Wonjin Eum</div>
-                </div>
-                <div className="mt-2 flex items-center justify-between border-t border-dashed border-sky-200 pt-2 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-sky-700">
-                  <span>Seat</span>
-                  <span>14A</span>
-                </div>
-              </div>
-
-              <div className="sticker absolute flex h-[76px] w-[76px] flex-col items-center justify-center rounded-full border border-[#1a56a0] bg-[#1a56a0] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 290, left: 440, transform: "rotate(-7deg)" }} data-tip="From Monterey, California — the coast, the fog, and the Bay always pulling me back.">
-                <span className="text-2xl leading-none">🌉</span>
-                <span className="mt-1 text-[0.55rem] font-bold tracking-[0.16em] text-white">SAN FRANCISCO</span>
-              </div>
-
-              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-[#0077b5] bg-[#0077b5] p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 170, left: 448, transform: "rotate(7deg)" }} data-tip="LinkedIn — Full Stack Engineering Intern, built a Chrome extension using LLMs for clothing sustainability scoring.">
-                <span className="text-[0.62rem] font-bold tracking-[0.22em] text-sky-200">in</span>
-                <span className="mt-1 text-sm font-semibold text-white">LinkedIn</span>
-                <span className="mt-1 text-[0.65rem] font-medium text-sky-200">SWE Intern 💼</span>
-              </div>
+              ))}
             </div>
           </div>
 
