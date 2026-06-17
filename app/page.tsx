@@ -1,12 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { ArrowDown, ChevronDown, FileText } from "lucide-react";
 import { FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa6";
-import { useEffect } from "react";
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "").replace(/\s+/g, "");
@@ -207,6 +206,79 @@ const fadeTransition = { duration: 0.6 } as const;
 
 export default function Home() {
   const [openExperience, setOpenExperience] = useState<Set<string>>(() => new Set());
+  const stickerWallRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = stickerWallRef.current;
+
+    if (!container) {
+      return undefined;
+    }
+
+    const tooltip = container.querySelector<HTMLDivElement>("#sticker-tooltip");
+
+    if (!tooltip) {
+      return undefined;
+    }
+
+    const hideTooltip = () => {
+      tooltip.style.opacity = "0";
+      tooltip.style.visibility = "hidden";
+    };
+
+    const positionTooltip = (sticker: HTMLElement) => {
+      const containerRect = container.getBoundingClientRect();
+      const stickerRect = sticker.getBoundingClientRect();
+      const tooltipWidth = tooltip.offsetWidth || 320;
+      const tooltipHeight = tooltip.offsetHeight || 72;
+      const centeredLeft = stickerRect.left - containerRect.left + stickerRect.width / 2;
+      const centeredTop = stickerRect.top - containerRect.top - 14;
+      const clampedLeft = Math.min(
+        Math.max(centeredLeft, tooltipWidth / 2 + 16),
+        containerRect.width - tooltipWidth / 2 - 16,
+      );
+      const clampedTop = Math.max(centeredTop - tooltipHeight, 18);
+
+      tooltip.style.left = `${clampedLeft}px`;
+      tooltip.style.top = `${clampedTop}px`;
+    };
+
+    const showTooltip = (event: MouseEvent) => {
+      const sticker = event.currentTarget as HTMLElement;
+      const tip = sticker.dataset.tip;
+
+      if (!tip) {
+        return;
+      }
+
+      tooltip.textContent = tip;
+      tooltip.style.visibility = "visible";
+      tooltip.style.opacity = "1";
+      positionTooltip(sticker);
+    };
+
+    const moveTooltip = (event: MouseEvent) => {
+      positionTooltip(event.currentTarget as HTMLElement);
+    };
+
+    const stickers = Array.from(container.querySelectorAll<HTMLElement>(".sticker"));
+
+    stickers.forEach((sticker) => {
+      sticker.addEventListener("mouseenter", showTooltip);
+      sticker.addEventListener("mousemove", moveTooltip);
+      sticker.addEventListener("mouseleave", hideTooltip);
+    });
+
+    hideTooltip();
+
+    return () => {
+      stickers.forEach((sticker) => {
+        sticker.removeEventListener("mouseenter", showTooltip);
+        sticker.removeEventListener("mousemove", moveTooltip);
+        sticker.removeEventListener("mouseleave", hideTooltip);
+      });
+    };
+  }, []);
 
   return (
     <main className="relative overflow-hidden bg-white text-[#111111]">
@@ -217,7 +289,7 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl flex-row items-center justify-between px-6 py-4 sm:px-10 lg:px-16">
           <a
             href="#home"
-            className="inline-flex items-center gap-3 self-start text-sm font-semibold tracking-[0.18em] text-zinc-950 transition-colors hover:text-amber-700"
+            className="font-[family-name:var(--font-geist)] inline-flex items-center gap-3 text-sm font-semibold tracking-[0.18em] text-zinc-950 transition-colors hover:text-amber-700"
           >
             <span>Wonjin Eum</span>
           </a>
@@ -226,7 +298,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item.label}
-                className="rounded-full px-4 py-2 text-zinc-600 transition-colors hover:bg-[#fff8dd] hover:text-zinc-950"
+                className="font-[family-name:var(--font-unbounded)] rounded-full px-4 py-2 text-zinc-600 transition-colors hover:bg-[#fff8dd] hover:text-zinc-950"
                 href={item.href}
               >
                 {item.label}
@@ -246,7 +318,7 @@ export default function Home() {
         <div className="grid min-h-[calc(100vh-9rem)] items-center gap-14 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="max-w-3xl">
             <motion.p
-              className="mb-5 text-xs uppercase tracking-[0.35em] text-amber-700/80"
+              className="font-[family-name:var(--font-unbounded)] mb-5 text-xs uppercase tracking-[0.35em] text-amber-700/80"
               variants={fadeUp}
               transition={fadeTransition}
             >
@@ -297,7 +369,7 @@ export default function Home() {
         </div>
 
         <motion.a
-          className="mx-auto mt-8 inline-flex flex-col items-center gap-2 pb-2 text-[0.65rem] uppercase tracking-[0.35em] text-zinc-500"
+          className="font-[family-name:var(--font-unbounded)] mx-auto mt-8 inline-flex flex-col items-center gap-2 pb-2 text-[0.65rem] uppercase tracking-[0.35em] text-zinc-500"
           href="#about"
           variants={fadeUp}
           transition={fadeTransition}
@@ -469,26 +541,110 @@ export default function Home() {
       </Section>
 
       <Section id="contact" label="Contact">
-        <div className="relative z-10 mx-auto max-w-4xl rounded-[2.25rem] border border-zinc-200 bg-white p-6 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-8">
-          <p className="text-xs uppercase tracking-[0.35em] text-amber-700/80">Let&apos;s connect!</p>
-          <p className="mt-4 max-w-2xl text-2xl leading-10 text-zinc-700 sm:text-3xl sm:leading-[1.55]">
-            If you want to talk about product, research, travel, or whatever comes next, reach out.
-          </p>
+        <div ref={stickerWallRef} className="mx-auto flex max-w-5xl flex-col items-center gap-8">
+          <div className="relative w-full overflow-hidden rounded-[2.5rem] border border-zinc-200 bg-[#f4f4f4] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:p-6">
+            <div className="relative aspect-[560/410] w-full overflow-visible">
+              <svg aria-hidden="true" viewBox="0 0 560 410" className="absolute inset-0 h-full w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+                <defs>
+                  <radialGradient id="laptopGradient" cx="50%" cy="35%" r="75%">
+                    <stop offset="0%" stopColor="#e8e8e8" />
+                    <stop offset="100%" stopColor="#c0c0c0" />
+                  </radialGradient>
+                  <linearGradient id="laptopSheen" x1="0%" x2="0%" y1="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.55" />
+                    <stop offset="52%" stopColor="#ffffff" stopOpacity="0.08" />
+                    <stop offset="100%" stopColor="#000000" stopOpacity="0.06" />
+                  </linearGradient>
+                </defs>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <rect x="62" y="36" width="436" height="286" rx="34" fill="url(#laptopGradient)" />
+                <rect x="62" y="36" width="436" height="286" rx="34" fill="url(#laptopSheen)" opacity="0.65" />
+                <rect x="78" y="50" width="404" height="250" rx="28" fill="none" stroke="#ffffff" strokeOpacity="0.35" />
+
+                <g transform="translate(262, 168) scale(1.1)" fill="#888" opacity="0.35">
+                  <path d="M26.4 4.2c1.6-2 2.7-4.8 2.4-7.6-2.3.1-5.1 1.5-6.8 3.5-1.5 1.7-2.8 4.5-2.4 7.1 2.5.2 5.2-1.3 6.8-3z" />
+                  <path d="M28.7 8c-3.7-.2-6.9 2.1-8.7 2.1-1.8 0-4.5-2-7.5-1.9-3.8.1-7.4 2.2-9.3 5.6-4 6.9-1 17.1 2.8 22.7 1.9 2.8 4.2 5.8 7.2 5.7 2.9-.1 4-1.9 7.5-1.9 3.5 0 4.5 1.9 7.5 1.8 3.1-.1 5.1-2.8 7-5.6 2.2-3.2 3.1-6.3 3.1-6.4-.1 0-6-2.3-6-9 0-5.6 4.6-8.3 4.8-8.5-2.6-3.9-6.7-4.3-8.4-4.6z" />
+                </g>
+              </svg>
+
+              <div
+                id="sticker-tooltip"
+                className="pointer-events-none invisible absolute z-30 max-w-[20rem] -translate-x-1/2 rounded-2xl border border-zinc-200 bg-white/95 px-4 py-3 text-sm leading-6 text-zinc-700 opacity-0 shadow-[0_20px_60px_rgba(0,0,0,0.14)] backdrop-blur transition-opacity duration-150"
+                style={{ left: "50%", top: "50%" }}
+              />
+
+              <div className="sticker absolute flex h-24 w-28 flex-col justify-center rounded-[1.1rem] border border-zinc-200 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 38, left: 44, transform: "rotate(-8deg)" }} data-tip="Cornell AppDev — iOS & web dev club. PM on Eatery, the campus dining app with 40k+ downloads.">
+                <span className="text-[0.65rem] font-bold tracking-[0.28em] text-red-600">CORNELL</span>
+                <span className="mt-1 text-sm font-semibold text-zinc-950">AppDev</span>
+              </div>
+
+              <div className="sticker absolute flex h-24 w-28 flex-col justify-center rounded-[1.1rem] border border-[#1e3a5f] bg-[#1e3a5f] p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 34, left: 270, transform: "rotate(5deg)" }} data-tip="Cornell Data Science — researching ML-guided cache eviction policies with Rust + PyTorch.">
+                <span className="text-[0.65rem] font-bold tracking-[0.28em] text-sky-300">CORNELL</span>
+                <span className="mt-1 text-sm font-semibold text-white">Data Science</span>
+              </div>
+
+              <div className="sticker absolute flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#B31B1B] bg-[#B31B1B] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 44, left: 468, transform: "rotate(6deg)" }} data-tip="Cornell University — studying CS in the College of Engineering, Class of 2027.">
+                <div className="leading-none">
+                  <div className="text-[0.63rem] font-bold tracking-[0.22em] text-white">CORNELL</div>
+                  <div className="mt-1 text-[0.58rem] font-semibold tracking-[0.18em] text-red-300">UNIVERSITY</div>
+                </div>
+              </div>
+
+              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-emerald-200 bg-emerald-500 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 170, left: 36, transform: "rotate(4deg)" }} data-tip="Central Coast Overdose Prevention — nonprofit working to reduce overdose deaths. Built NarcanSOS in partnership with them.">
+                <span className="text-[0.6rem] font-bold tracking-[0.24em] text-emerald-900">CENTRAL COAST</span>
+                <span className="mt-1 text-sm font-semibold text-white">CCODP</span>
+                <span className="mt-1 text-[0.65rem] font-medium text-emerald-200">Overdose Prevention 💚</span>
+              </div>
+
+              <div className="sticker absolute flex h-24 w-24 flex-col items-center justify-center rounded-[1.1rem] border border-zinc-200 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 295, left: 52, transform: "rotate(-5deg)" }} data-tip="Born and raised in South Korea — the kimchi, the trains, the Han River always calling me back.">
+                <span className="text-3xl leading-none">🇰🇷</span>
+                <span className="mt-1 text-sm font-semibold text-zinc-700">Korea</span>
+              </div>
+
+              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-indigo-300 bg-white p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 175, left: 195, transform: "rotate(-3deg)" }} data-tip="Cayuga Healthcare Consulting — Cornell consulting club focused on healthcare strategy and innovation.">
+                <span className="text-[0.62rem] font-bold tracking-[0.24em] text-indigo-300">CAYUGA</span>
+                <span className="mt-1 text-sm font-semibold text-zinc-950">Healthcare</span>
+                <span className="mt-1 text-[0.65rem] font-medium text-indigo-500">Consulting 🏥</span>
+              </div>
+
+              <div className="sticker absolute flex h-28 w-34 flex-col justify-center rounded-[1.1rem] border border-sky-200 bg-sky-50 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 290, left: 200, transform: "rotate(3deg)" }} data-tip="Always moving — between Ithaca, LA, Seoul, and wherever comes next.">
+                <div className="flex items-center justify-center gap-2 text-[0.75rem] font-bold uppercase tracking-[0.22em] text-sky-900">
+                  <span>Boarding Pass</span>
+                </div>
+                <div className="mt-2 border-t border-dashed border-sky-200 pt-2 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-sky-900">
+                  <div>ICN → JFK</div>
+                  <div>✈ Wonjin Eum</div>
+                </div>
+                <div className="mt-2 flex items-center justify-between border-t border-dashed border-sky-200 pt-2 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-sky-700">
+                  <span>Seat</span>
+                  <span>14A</span>
+                </div>
+              </div>
+
+              <div className="sticker absolute flex h-[76px] w-[76px] flex-col items-center justify-center rounded-full border border-[#1a56a0] bg-[#1a56a0] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 290, left: 440, transform: "rotate(-7deg)" }} data-tip="From Monterey, California — the coast, the fog, and the Bay always pulling me back.">
+                <span className="text-2xl leading-none">🌉</span>
+                <span className="mt-1 text-[0.55rem] font-bold tracking-[0.16em] text-white">SAN FRANCISCO</span>
+              </div>
+
+              <div className="sticker absolute flex h-28 w-32 flex-col justify-center rounded-[1.1rem] border border-[#0077b5] bg-[#0077b5] p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 170, left: 448, transform: "rotate(7deg)" }} data-tip="LinkedIn — Full Stack Engineering Intern, built a Chrome extension using LLMs for clothing sustainability scoring.">
+                <span className="text-[0.62rem] font-bold tracking-[0.22em] text-sky-200">in</span>
+                <span className="mt-1 text-sm font-semibold text-white">LinkedIn</span>
+                <span className="mt-1 text-[0.65rem] font-medium text-sky-200">SWE Intern 💼</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
             {socialLinks.map(({ label, href, icon: Icon }) => (
               <a
                 key={label}
                 href={href}
                 target={href.startsWith("mailto:") || href.startsWith("/") ? undefined : "_blank"}
                 rel={href.startsWith("mailto:") || href.startsWith("/") ? undefined : "noreferrer"}
-                className="flex items-center justify-between rounded-full border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-700 transition-all duration-300 hover:border-amber-300 hover:text-zinc-950"
+                className="group inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white px-5 py-3 text-sm font-medium text-zinc-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-300 hover:text-zinc-950 hover:shadow-[0_16px_36px_rgba(0,0,0,0.05)]"
               >
-                <span className="flex items-center gap-3">
-                  <Icon className="h-4 w-4" />
-                  {label}
-                </span>
-                <ChevronDown className="h-4 w-4 -rotate-90 text-zinc-400" />
+                <Icon className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                <span>{label}</span>
               </a>
             ))}
           </div>
@@ -497,7 +653,7 @@ export default function Home() {
 
       <footer className="border-t border-zinc-100 py-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center px-6 text-center sm:px-10 lg:px-16">
-          <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">Wonjin Eum © 2026</p>
+          <p className="font-[family-name:var(--font-unbounded)] text-xs uppercase tracking-[0.3em] text-zinc-400">Wonjin Eum © 2026</p>
         </div>
       </footer>
     </main>
@@ -516,7 +672,7 @@ function Section({
   return (
     <section id={id} className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-20 sm:px-10 sm:py-24 lg:px-16 lg:py-28">
       <div className="mb-10 flex items-center gap-4">
-        <p className="text-xs uppercase tracking-[0.34em] text-amber-700/80">{label}</p>
+        <p className="font-[family-name:var(--font-unbounded)] text-xs uppercase tracking-[0.34em] text-amber-700/80">{label}</p>
         <span className="h-px flex-1 bg-gradient-to-r from-amber-200 via-zinc-200 to-transparent" />
       </div>
       {children}
