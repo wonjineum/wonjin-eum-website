@@ -1,3 +1,3 @@
 # Wonjin Eum
 
-My personal website — [wonjin-eum-website.vercel.app](https://wonjin-eum-website.vercel.app)
+My personal website — [wonjineum.vercel.app](https://wonjineum.vercel.app)
