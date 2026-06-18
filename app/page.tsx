@@ -591,6 +591,7 @@ export default function Home() {
                     height: sticker.size,
                     transform: `rotate(${sticker.rotate})`,
                     borderRadius: sticker.shape === "circle" ? "50%" : "1.1rem",
+                    zIndex: sticker.alt === "LinkedIn" ? 20 : 1,
                   }}
                   data-tip={sticker.tip}
                 >
@@ -598,7 +599,7 @@ export default function Home() {
                 </div>
               ))}
 
-              <div className="sticker absolute flex h-28 w-54 flex-col justify-center rounded-[0.5rem] border border-sky-200 bg-sky-50 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 380, left: 500, transform: "rotate(3deg)" }} data-tip="Always moving and traveling - excited for my next journey! ✈️">
+              <div className="sticker absolute flex h-28 w-54 flex-col justify-center rounded-[0.5rem] border border-sky-200 bg-sky-50 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 380, left: 500, transform: "rotate(3deg)", zIndex: 1 }} data-tip="Always moving and traveling - excited for my next journey! ✈️">
                 <div className="flex items-center justify-center gap-2 whitespace-nowrap text-[0.75rem] font-bold uppercase tracking-[0.22em] text-sky-900">
                   <span>Boarding Pass</span>
                 </div>
