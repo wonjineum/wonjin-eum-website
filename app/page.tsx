@@ -79,17 +79,6 @@ type ExperienceItem = {
   imageAlt?: string;
 };
 
-type Sticker = {
-  src: string;
-  alt: string;
-  tip: string;
-  top: number;
-  left: number;
-  rotate: string;
-  shape: "square" | "circle";
-  size: number;
-};
-
 const navItems = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
@@ -103,109 +92,6 @@ const socialLinks: SocialLink[] = [
   { label: "LinkedIn", href: "https://linkedin.com/in/wonjineum", icon: FaLinkedinIn },
   { label: "Email", href: "mailto:we46@cornell.edu", icon: FaEnvelope },
   { label: "Resume", href: "/resume.pdf", icon: FileText },
-];
-
-const stickers: Sticker[] = [
-  {
-    src: "/sticker-appdev.png",
-    alt: "Cornell AppDev",
-    tip: "Cornell AppDev — iOS & web dev club. PM on Eatery, the campus dining app with 40k+ downloads.",
-    top: 130,
-    left: 200,
-    rotate: "-8deg",
-    shape: "square",
-    size: 112,
-  },
-  {
-    src: "/sticker-cds.png",
-    alt: "Cornell Data Science",
-    tip: "Cornell Data Science — researching ML-guided cache eviction policies with Rust + PyTorch.",
-    top: 150,
-    left: 370,
-    rotate: "5deg",
-    shape: "square",
-    size: 112,
-  },
-  {
-    src: "/sticker-cornell.png",
-    alt: "Cornell University",
-    tip: "Cornell University — studying CS in the College of Engineering, Class of 2027.",
-    top: 100,
-    left: 710,
-    rotate: "6deg",
-    shape: "circle",
-    size: 120,
-  },
-  {
-    src: "/sticker-ccodp.png",
-    alt: "CCODP",
-    tip: "Central Coast Overdose Prevention — nonprofit working to reduce overdose deaths. Built NarcanSOS in partnership with them.",
-    top: 400,
-    left: 160,
-    rotate: "4deg",
-    shape: "square",
-    size: 112,
-  },
-  {
-    src: "/sticker-cayuga.png",
-    alt: "Cayuga Healthcare",
-    tip: "Cayuga Healthcare Consulting — Cornell consulting club focused on healthcare strategy and innovation.",
-    top: 325,
-    left: 250,
-    rotate: "-3deg",
-    shape: "square",
-    size: 112,
-  },
-  {
-    src: "/sticker-boarding.png",
-    alt: "Boarding Pass",
-    tip: "Always moving — between Ithaca, LA, Seoul, and wherever comes next.",
-    top: 380,
-    left: 500,
-    rotate: "3deg",
-    shape: "square",
-    size: 112,
-  },
-  {
-    src: "/sticker-ithaca.png",
-    alt: "Ithaca",
-    tip: "Ithaca, NY — home of gorges, cold winters, and Cornell.",
-    top: 230,
-    left: 700,
-    rotate: "-10deg",
-    shape: "circle",
-    size: 76,
-  },
-  {
-    src: "/sticker-monterey.png",
-    alt: "Monterey",
-    tip: "Monterey, CA — where I grew up, on the coast.",
-    top: 215,
-    left: 615,
-    rotate: "10deg",
-    shape: "circle",
-    size: 76,
-  },
-  {
-    src: "/sticker-korea.png",
-    alt: "Korea",
-    tip: "Born and raised in South Korea — the kimchi, the trains, the Han River always calling me back.",
-    top: 230,
-    left: 530,
-    rotate: "-10deg",
-    shape: "circle",
-    size: 76,
-  },
-  {
-    src: "/sticker-linkedin.png",
-    alt: "LinkedIn",
-    tip: "LinkedIn — Full Stack Engineering Intern, built a Chrome extension using LLMs for clothing sustainability scoring.",
-    top: 400,
-    left: 680,
-    rotate: "-10deg",
-    shape: "square",
-    size: 112,
-  },
 ];
 
 const projects: Project[] = [
@@ -687,7 +573,14 @@ export default function Home() {
                 style={{ left: "50%", top: "50%" }}
               />
 
-              {stickers.map((sticker) => (
+              {[
+                { src: "/sticker-appdev.png", alt: "Cornell AppDev", tip: "Cornell AppDev 📱 — Working as a Product Manager on Eatery, the campus dining app with 40k+ downloads.", top: 130, left: 200, rotate: "-8deg", shape: "square", size: 112 },
+                { src: "/sticker-cds.png", alt: "Cornell Data Science", tip: "Cornell Data Science 📊 — Researching ML/AI-powered cache eviction policies with Rust + PyTorch.", top: 150, left: 370, rotate: "5deg", shape: "square", size: 112 },
+                { src: "/sticker-cornell.png", alt: "Cornell University", tip: "Cornell University — Studying CS in the College of Engineering. Go Big Red! 🐻", top: 100, left: 670, rotate: "6deg", shape: "circle", size: 150 },
+                { src: "/sticker-ccodp.png", alt: "CCODP", tip: "Central Coast Overdose Prevention 🫀 — Building NarcanSOS app in partnership with a nonprofit working to prevent overdose cases.", top: 400, left: 160, rotate: "6deg", shape: "square", size: 112 },
+                { src: "/sticker-cayuga.png", alt: "Cayuga Healthcare", tip: "Cayuga Healthcare Consulting 🧬 — Taking client calls to drive healthcare strategy and innovation.", top: 325, left: 310, rotate: "-10deg", shape: "square", size: 112 },
+                { src: "/sticker-linkedin.png", alt: "LinkedIn", tip: "Let's connect! I am excited to meet you. 🙌", top: 400, left: 680, rotate: "-10deg", shape: "square", size: 112 },
+              ].map((sticker) => (
                 <div
                   key={sticker.alt}
                   className="sticker absolute overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.15)] transition-transform duration-200 hover:scale-105"
@@ -701,15 +594,38 @@ export default function Home() {
                   }}
                   data-tip={sticker.tip}
                 >
-                  <Image
-                    src={sticker.src}
-                    alt={sticker.alt}
-                    fill
-                    className="object-cover"
-                    sizes="120px"
-                  />
+                  <Image src={sticker.src} alt={sticker.alt} fill className="object-cover" sizes="140px" />
                 </div>
               ))}
+
+              <div className="sticker absolute flex h-28 w-54 flex-col justify-center rounded-[0.5rem] border border-sky-200 bg-sky-50 p-3 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 380, left: 500, transform: "rotate(3deg)" }} data-tip="Always moving and traveling - excited for my next journey! ✈️">
+                <div className="flex items-center justify-center gap-2 whitespace-nowrap text-[0.75rem] font-bold uppercase tracking-[0.22em] text-sky-900">
+                  <span>Boarding Pass</span>
+                </div>
+                <div className="mt-2 border-t border-dashed border-sky-200 pt-2 text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-sky-900">
+                  <div className="whitespace-nowrap">ICN → JFK</div>
+                  <div className="whitespace-nowrap">✈ Wonjin Eum</div>
+                </div>
+                <div className="mt-2 flex items-center justify-between border-t border-dashed border-sky-200 pt-2 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-sky-700">
+                  <span>Seat</span>
+                  <span>14A</span>
+                </div>
+              </div>
+
+              <div className="sticker absolute flex h-[76px] w-[76px] flex-col items-center justify-center rounded-full border border-zinc-200 bg-[#FFFFFF] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 230, left: 700, transform: "rotate(-10deg)" }} data-tip="These are places I call home sweet home 🏠">
+                <span className="text-2xl leading-none">⛰️</span>
+                <span className="font-[family-name:var(--font-unbounded)] mt-1 text-[0.55rem] font-bold tracking-[0.16em] text-black">Ithaca, NY</span>
+              </div>
+
+              <div className="sticker absolute flex h-[76px] w-[76px] flex-col items-center justify-center rounded-full border border-zinc-200 bg-[#FFFFFF] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 215, left: 615, transform: "rotate(10deg)" }} data-tip="These are places I call home sweet home 🏠">
+                <span className="text-2xl leading-none">🌊</span>
+                <span className="font-[family-name:var(--font-unbounded)] mt-1 text-[0.55rem] font-bold tracking-[0.16em] text-black">Monterey, CA</span>
+              </div>
+
+              <div className="sticker absolute flex h-[76px] w-[76px] flex-col items-center justify-center rounded-full border border-zinc-200 bg-[#FFFFFF] p-2 text-center shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-transform duration-200 hover:scale-105" style={{ top: 230, left: 530, transform: "rotate(-10deg)" }} data-tip="These are places I call home sweet home 🏠">
+                <span className="text-2xl leading-none">🇰🇷</span>
+                <span className="font-[family-name:var(--font-unbounded)] mt-1 text-[0.55rem] font-bold tracking-[0.16em] text-black">Seoul, Korea</span>
+              </div>
             </div>
           </div>
 
