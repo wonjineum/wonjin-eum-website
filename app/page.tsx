@@ -149,9 +149,9 @@ const experience: ExperienceItem[] = [
     period: "Sep 2025 – Present",
     location: "Ithaca, NY",
     bullets: [
-      "Developed a Chrome extension using LLMs to score clothing sustainability and recommend eco-friendly alternatives.",
-      "Collaborated with LinkedIn engineers and mentors through professional workshops to design scalable product features.",
-      "Presented the product at LinkedIn HQ, incorporating user feedback and iterating on computer vision improvements.",
+      "Developed a Chrome extension using LLM API pipeline to score clothing sustainability and recommend eco-alternatives.",
+      "Achieved 60% click-through on sustainable alternatives by integrating computer vision to extract real-time product data.",
+      "Refined scalable architecture and Git workflows through system design collaboration with LinkedIn headquarter engineers.",
     ],
     imageAlt: "LinkedIn internship photo",
     image: "/experience-linkedin.png",
@@ -162,9 +162,9 @@ const experience: ExperienceItem[] = [
     period: "Jun 2026 – Aug 2026",
     location: "Los Angeles, CA",
     bullets: [
-      "Built a customer-facing AI chat tool using LLM APIs and full-stack development for clients to access knowledge bases.",
-      "Developed internal sales pipeline automations for the CEO to streamline restaurant client acquisition workflows.",
-      "Participated in onboarding client meetings to iterate on product features and drive restaurant partner growth.",
+      "Built an AI-powered support chatbot for 50+ restaurant clients, designing a RAG pipeline with a FastAPI backend.",
+      "Deflected 15+ FAQ support tickets/month by implementing a keyword-based retrieval on a markdown knowledge base.",
+      "Drove customer success by standardizing admin workflows in the POS-integrated system with 1,000+ average orders/day.",
     ],
     imageAlt: "Curate internship photo",
     image: "/experience-curate.jpg",
@@ -172,7 +172,7 @@ const experience: ExperienceItem[] = [
   {
     organization: "CGBio USA",
     role: "Data Analytics Intern",
-    period: "Mar 2025 – Mar 2025",
+    period: "Feb 2025 – Mar 2025",
     location: "Irvine, CA",
     bullets: [
       "Contributed to securing the FDA Humanitarian Device Exemption approval for a new biomedical device, Novosis.",
@@ -185,7 +185,7 @@ const experience: ExperienceItem[] = [
   {
     organization: "Daewoong Pharmaceutical",
     role: "AI Drug Discovery Intern",
-    period: "Mar 2025 – Mar 2025",
+    period: "Mar 2025 – Apr 2025",
     location: "South Korea",
     bullets: [
       "Supported AI-assisted drug discovery workflows by helping structure and review data for model-driven analysis.",
